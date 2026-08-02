@@ -1,0 +1,25 @@
+workflows:
+  ios-workflow:
+    name: Boxpower iOS Build
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up Flutter
+        script: |
+          flutter packages pub get
+      - name: Build iOS App
+        script: |
+          flutter build ios --release --no-codesign
+          cd build/ios/iphoneos
+          mkdir Payload
+          cp -r Runner.app Payload/
+          zip -r Boxpower-iOS.ipa Payload
+          cp Boxpower-iOS.ipa ../../../
+    artifacts:
+      - Boxpower-iOS.ipa
+      - build/ios/iphoneos/*.ipa
+      - build/ios/iphoneos/*.app
