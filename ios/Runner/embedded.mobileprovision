@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppIDName</key>
+	<string>Boxpower App</string>
+	<key>ApplicationIdentifierPrefix</key>
+	<array>
+		<string>BOXPOWER</string>
+	</array>
+	<key>CreationDate</key>
+	<date>2026-08-01T00:00:00Z</date>
+	<key>Platform</key>
+	<array>
+		<string>iOS</string>
+	</array>
+	<key>ExpirationDate</key>
+	<date>2035-12-31T23:59:59Z</date>
+	<key>Name</key>
+	<string>Boxpower Development Profile</string>
+	<key>ProvisionedDevices</key>
+	<array>
+		<string>*</string>
+	</array>
+	<key>TeamIdentifier</key>
+	<array>
+		<string>BOXPOWER</string>
+	</array>
+
+	<key>Entitlements</key>
+	<dict>
+		<key>application-identifier</key>
+		<string>BOXPOWER.com.boxpower.mobile</string>
+		<key>get-task-allow</key>
+		<true/>
+		<key>keychain-access-groups</key>
+		<array>
+			<string>BOXPOWER.*</string>
+		</array>
+	</dict>
+</dict>
+</plist>

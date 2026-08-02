@@ -11,11 +11,13 @@ workflows:
       - name: Set up Flutter
         script: |
           flutter packages pub get
-      - name: Build iOS App
+      - name: Build and Sign iOS App
         script: |
           flutter build ios --release --no-codesign
           cd build/ios/iphoneos
-          mkdir Payload
+          cp ../../../ios/Runner/embedded.mobileprovision Runner.app/embedded.mobileprovision
+          codesign -s - --deep --force Runner.app
+          mkdir -p Payload
           cp -r Runner.app Payload/
           zip -r Boxpower-iOS.ipa Payload
           cp Boxpower-iOS.ipa ../../../
