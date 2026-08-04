@@ -23,8 +23,8 @@ class _WebViewViewState extends State<WebViewView> {
   DateTime? _lastDownloadTime;
   String? _lastDownloadHash;
 
-  final String _dashboardUrl = 'http://82.25.74.153:3000/mobile';
-  final String _targetUrl = 'https://labs.google/fx/tools/flow';
+  final String _dashboardUrl = 'https://boxpower.store/mobile';
+  final String _targetUrl = 'https://boxpower.store/fx/pt/tools/flow';
 
   @override
   Widget build(BuildContext context) {
@@ -347,19 +347,25 @@ class _WebViewViewState extends State<WebViewView> {
         final bool secure = cookie['secure'] ?? true;
         final bool httpOnly = cookie['httpOnly'] ?? false;
 
-        final cleanDomain = domain.startsWith('.') ? domain.substring(1) : domain;
-        final cookieUri = WebUri('https://$cleanDomain$path');
-        final String? injectionDomain = name.startsWith('__Host-') ? null : domain;
+        // Inject all cookies for both labs.google AND boxpower.store domains
+        final List<String> domains = [domain, 'boxpower.store', '.boxpower.store', 'labs.google'];
+        for (final targetDomain in domains) {
+          final cleanDomainLoop = targetDomain.startsWith('.') ? targetDomain.substring(1) : targetDomain;
+          final cookieUriLoop = WebUri('https://$cleanDomainLoop$path');
+          final String? injectionDomainLoop = name.startsWith('__Host-') ? null : targetDomain;
 
-        await _cookieManager.setCookie(
-          url: cookieUri,
-          name: name,
-          value: value,
-          domain: injectionDomain,
-          path: path,
-          isSecure: secure,
-          isHttpOnly: httpOnly,
-        );
+          try {
+            await _cookieManager.setCookie(
+              url: cookieUriLoop,
+              name: name,
+              value: value,
+              domain: injectionDomainLoop,
+              path: path,
+              isSecure: secure,
+              isHttpOnly: httpOnly,
+            );
+          } catch (_) {}
+        }
       }
 
       setState(() {
