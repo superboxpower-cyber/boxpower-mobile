@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Connected directly to the VPS Public API
-  static const String baseUrl = 'http://82.25.74.153:3000';
+  static const String baseUrl = 'https://ultraflow.boxpower.store';
 
   /**
    * Performs client authentication and stores JWT token in SharedPreferences

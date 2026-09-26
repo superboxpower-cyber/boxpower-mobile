@@ -23,8 +23,8 @@ class _WebViewViewState extends State<WebViewView> {
   DateTime? _lastDownloadTime;
   String? _lastDownloadHash;
 
-  final String _dashboardUrl = 'https://boxpower.store/mobile';
-  final String _targetUrl = 'https://boxpower.store/fx/pt/tools/flow';
+  final String _dashboardUrl = 'https://ultraflow.boxpower.store/mobile';
+  final String _targetUrl = 'https://labs.google/fx/tools/flow';
 
   @override
   Widget build(BuildContext context) {
