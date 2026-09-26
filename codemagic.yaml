@@ -37,12 +37,14 @@ workflows:
       - name: Set up Flutter
         script: |
           flutter packages pub get
-      - name: Flutter doctor
+      - name: Build Android APK
         script: |
-          flutter doctor -v
-      - name: Build Android APK (debug — sem assinatura)
-        script: |
-          flutter build apk --debug 2>&1
-          ls -lah build/app/outputs/flutter-apk/ 2>/dev/null || echo "APK folder not found"
+          flutter build apk --debug
+          echo "=== APK files found: ==="
+          find . -name "*.apk" -not -path "*/cache/*" 2>/dev/null
+          cp build/app/outputs/flutter-apk/app-debug.apk Boxpower-Android.apk 2>/dev/null || \
+          cp $(find . -name "*.apk" -not -path "*/cache/*" | head -1) Boxpower-Android.apk 2>/dev/null || \
+          echo "APK not found"
     artifacts:
-      - build/app/outputs/flutter-apk/app-debug.apk
+      - Boxpower-Android.apk
+      - build/app/outputs/**/*.apk
