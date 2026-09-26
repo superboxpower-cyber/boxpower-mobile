@@ -34,17 +34,18 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Set up Flutter
-        script: |
-          flutter packages pub get
       - name: Build Android APK
         script: |
+          set -x
+          flutter packages pub get
           flutter build apk --debug
-          echo "=== APK files found: ==="
-          find . -name "*.apk" -not -path "*/cache/*" 2>/dev/null
-          cp build/app/outputs/flutter-apk/app-debug.apk Boxpower-Android.apk 2>/dev/null || \
-          cp $(find . -name "*.apk" -not -path "*/cache/*" | head -1) Boxpower-Android.apk 2>/dev/null || \
-          echo "APK not found"
+          echo "=== PWD: $(pwd) ==="
+          echo "=== All APKs: ==="
+          find . -name "*.apk" -not -path "*/.gradle/*" -not -path "*/cache/*"
+          echo "=== Copy APK ==="
+          APK_PATH=$(find . -name "app-debug.apk" | head -1)
+          echo "Found APK at: $APK_PATH"
+          cp "$APK_PATH" ./Boxpower-Android.apk && echo "Copied to root OK"
     artifacts:
+      - "**/*.apk"
       - Boxpower-Android.apk
-      - build/app/outputs/**/*.apk
