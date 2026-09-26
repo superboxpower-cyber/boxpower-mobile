@@ -37,8 +37,12 @@ workflows:
       - name: Set up Flutter
         script: |
           flutter packages pub get
-      - name: Build Android APK
+      - name: Flutter doctor
         script: |
-          flutter build apk --release
+          flutter doctor -v
+      - name: Build Android APK (debug — sem assinatura)
+        script: |
+          flutter build apk --debug 2>&1
+          ls -lah build/app/outputs/flutter-apk/ 2>/dev/null || echo "APK folder not found"
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/flutter-apk/app-debug.apk
