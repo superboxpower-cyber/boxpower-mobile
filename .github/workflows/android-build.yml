@@ -18,24 +18,36 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NDK
+        run: |
+          echo "Installing NDK..."
+          sdkmanager --install "ndk;27.0.12077973" --sdk_root=$ANDROID_SDK_ROOT 2>&1 | tail -5 || \
+          sdkmanager --install "ndk;26.3.11579264" --sdk_root=$ANDROID_SDK_ROOT 2>&1 | tail -5 || \
+          echo "NDK install attempted"
+          ls $ANDROID_SDK_ROOT/ndk/ 2>/dev/null || echo "NDK dir not found"
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
+      - name: Flutter doctor
+        run: flutter doctor -v
+
       - name: Get dependencies
-        run: flutter pub get --verbose
+        run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --debug
-
-      - name: Show APK info
         run: |
-          ls -lah build/app/outputs/flutter-apk/app-debug.apk
-          echo "APK size: $(du -h build/app/outputs/flutter-apk/app-debug.apk | cut -f1)"
+          flutter build apk --debug 2>&1
+          ls -lah build/app/outputs/flutter-apk/ 2>/dev/null || echo "APK dir not found"
 
       - name: Upload APK artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Boxpower-Flow-APK
@@ -43,6 +55,7 @@ jobs:
           retention-days: 30
 
       - name: Upload to VPS
+        if: success()
         continue-on-error: true
         run: |
           curl -s -X POST \
@@ -50,4 +63,4 @@ jobs:
             -H "Content-Type: application/octet-stream" \
             --data-binary "@build/app/outputs/flutter-apk/app-debug.apk" \
             --max-time 180 \
-            -w "\nHTTP: %{http_code}\n" && echo "Upload VPS OK" || echo "Upload VPS falhou (não crítico)"
+            -w "\nHTTP: %{http_code}\n" && echo "Upload VPS OK" || echo "Upload VPS falhou"
