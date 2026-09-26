@@ -4,10 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-      - 'lib/**'
-      - 'android/**'
-      - 'pubspec.yaml'
 
 jobs:
   build-android:
