@@ -25,3 +25,19 @@ workflows:
       - Boxpower-iOS.ipa
       - build/ios/iphoneos/*.ipa
       - build/ios/iphoneos/*.app
+
+  android-workflow:
+    name: Boxpower Android APK
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Set up Flutter
+        script: |
+          flutter packages pub get
+      - name: Build Android APK
+        script: |
+          flutter build apk --release --split-per-abi
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
