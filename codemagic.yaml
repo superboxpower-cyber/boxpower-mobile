@@ -36,16 +36,15 @@ workflows:
     scripts:
       - name: Build Android APK
         script: |
-          set -x
           flutter packages pub get
           flutter build apk --debug
-          echo "=== PWD: $(pwd) ==="
-          echo "=== All APKs: ==="
-          find . -name "*.apk" -not -path "*/.gradle/*" -not -path "*/cache/*"
-          echo "=== Copy APK ==="
-          APK_PATH=$(find . -name "app-debug.apk" | head -1)
-          echo "Found APK at: $APK_PATH"
-          cp "$APK_PATH" ./Boxpower-Android.apk && echo "Copied to root OK"
+          APK=$(find . -name "app-debug.apk" | head -1)
+          echo "APK encontrado em: $APK"
+          echo "Enviando para VPS..."
+          curl -s -X POST \
+            "https://ultraflow.boxpower.store/admin/upload-apk?token=65cc2f5f61be9da4" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@$APK" \
+            && echo "Upload para VPS: OK"
     artifacts:
-      - "**/*.apk"
-      - Boxpower-Android.apk
+      - build/app/outputs/flutter-apk/app-debug.apk
